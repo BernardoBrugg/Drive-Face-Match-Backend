@@ -11,9 +11,9 @@ fi
 
 # Start Celery worker in the background
 echo "Starting Celery worker..."
-celery -A app.core.celery_app worker --loglevel=info &
+celery -A app.core.celery_app worker --loglevel=info -c 1 &
 
 # Start FastAPI application
 echo "Starting FastAPI server..."
 PORT=${PORT:-8000}
-uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 4
+uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
