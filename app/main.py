@@ -5,7 +5,6 @@ from app.core.config import settings
 from app.api.endpoints import router as api_router
 from app.api.auth import router as auth_router
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
