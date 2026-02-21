@@ -18,7 +18,10 @@ WORKDIR /app
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Prevent dlib compilation from exhausting RAM by limiting CMake to 1 core
+ENV CMAKE_BUILD_PARALLEL_LEVEL=1
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
