@@ -7,7 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 MAX_IMAGE_DIMENSION = 1200
-FACE_MATCH_DISTANCE_THRESHOLD = 0.45
+FACE_MATCH_DISTANCE_THRESHOLD = 0.6
 
 
 def get_face_encodings(image_content: bytes):
