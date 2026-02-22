@@ -1,3 +1,12 @@
+---
+title: Drive Face Match Backend
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # Face Recon Drive Backend
 
 High-performance, concurrent backend service for scanning Google Drive folders and identifying faces using `dlib` and `face_recognition`.
