@@ -27,7 +27,7 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY . .
 
 # Expose FastAPI port
-EXPOSE 8000
+EXPOSE 7860
 
 RUN chmod +x start.sh
 

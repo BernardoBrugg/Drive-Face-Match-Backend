@@ -15,5 +15,5 @@ celery -A app.core.celery_app worker --loglevel=info -c 1 &
 
 # Start FastAPI application
 echo "Starting FastAPI server..."
-PORT=${PORT:-8000}
+PORT=${PORT:-7860}
 uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
