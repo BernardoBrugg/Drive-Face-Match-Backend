@@ -4,8 +4,7 @@ set -e
 # Start Redis server in the background (if running everything in one container, e.g. for free tiers)
 # NOTE: In a true production environment with multiple containers, Redis should be its own service.
 # If REDIS_URL points to an external service, we skip local redis.
-if [[ "$REDIS_URL" == *"localhost"* ]] || [[ "$REDIS_URL" == *"127.0.0.1"* ]]; then
-    apt-get update && apt-get install -y redis-server
+if [[ -z "$REDIS_URL" ]] || [[ "$REDIS_URL" == *"localhost"* ]] || [[ "$REDIS_URL" == *"127.0.0.1"* ]]; then
     redis-server --daemonize yes
 fi
 
