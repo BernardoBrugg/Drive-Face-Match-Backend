@@ -6,7 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-MAX_IMAGE_DIMENSION = 1200
+MAX_IMAGE_DIMENSION = 2000
 FACE_MATCH_DISTANCE_THRESHOLD = 0.6
 
 
@@ -23,7 +23,7 @@ def get_face_encodings(image_content: bytes):
 
         image_np = np.array(image)
 
-        return face_recognition.face_encodings(image_np, model="small")
+        return face_recognition.face_encodings(image_np)
 
     except UnidentifiedImageError:
         logger.warning("Failed to load image: invalid format")
