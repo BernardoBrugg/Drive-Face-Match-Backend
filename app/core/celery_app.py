@@ -14,6 +14,14 @@ celery_app = Celery(
     include=["app.workers.tasks"],
 )
 
+# Fix for Upstash rediss:// URLs
+if settings.REDIS_URL.startswith("rediss://"):
+    celery_app.conf.broker_use_ssl = {
+        "ssl_cert_reqs": "CERT_NONE"
+    }
+    celery_app.conf.redis_backend_use_ssl = {
+        "ssl_cert_reqs": "CERT_NONE"
+    }
 celery_app.conf.update(
     task_serializer="json",
     accept_content=["json"],
