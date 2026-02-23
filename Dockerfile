@@ -29,6 +29,10 @@ COPY . .
 # Expose FastAPI port
 EXPOSE 7860
 
+# Give permissions to the Hugging Face user (1000)
+RUN chown -R 1000:1000 /app
+USER 1000
+
 RUN chmod +x start.sh
 
 CMD ["./start.sh"]

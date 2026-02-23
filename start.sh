@@ -5,7 +5,7 @@ set -e
 # NOTE: In a true production environment with multiple containers, Redis should be its own service.
 # If REDIS_URL points to an external service, we skip local redis.
 if [[ -z "$REDIS_URL" ]] || [[ "$REDIS_URL" == *"localhost"* ]] || [[ "$REDIS_URL" == *"127.0.0.1"* ]]; then
-    redis-server --daemonize yes
+    redis-server --daemonize yes --dir /app
 fi
 
 # Start Celery worker in the background
