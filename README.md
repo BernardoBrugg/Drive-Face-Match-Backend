@@ -42,6 +42,15 @@ High-performance, concurrent backend service for scanning Google Drive folders a
    uvicorn app.main:app --reload
    ```
 
+### Unified Startup (Recommended)
+To start both the API and the Worker in a single terminal:
+```bash
+chmod +x start.sh
+./start.sh
+```
+> [!NOTE]  
+> The worker and API must both be running for scans to progress.
+
 ## Local Development (Docker)
 
 To run the entire stack (Redis, API, Worker) cleanly inside isolated containers:

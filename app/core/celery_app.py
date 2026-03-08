@@ -1,4 +1,5 @@
 import logging
+import os
 from celery import Celery
 from app.core.config import settings
 
@@ -7,10 +8,25 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 
-redis_url = settings.REDIS_URL
-if redis_url.startswith("rediss://") and "ssl_cert_reqs" not in redis_url:
-    separator = "&" if "?" in redis_url else "?"
-    redis_url += f"{separator}ssl_cert_reqs=CERT_NONE"
+def ensure_ssl_cert_reqs(url: str) -> str:
+    if not url:
+        return url
+    url = url.strip().strip("'").strip('"')
+    if url.startswith("rediss://") and "ssl_cert_reqs" not in url:
+        separator = "&" if "?" in url else "?"
+        url += f"{separator}ssl_cert_reqs=CERT_NONE"
+    return url
+
+redis_url = ensure_ssl_cert_reqs(settings.REDIS_URL)
+
+# Also ensure any Celery native environment variables are fixed if the user set those instead
+if "CELERY_BROKER_URL" in os.environ:
+    os.environ["CELERY_BROKER_URL"] = ensure_ssl_cert_reqs(os.environ["CELERY_BROKER_URL"])
+if "CELERY_RESULT_BACKEND" in os.environ:
+    os.environ["CELERY_RESULT_BACKEND"] = ensure_ssl_cert_reqs(os.environ["CELERY_RESULT_BACKEND"])
+# Some HF Spaces configs might use REDIS_URL from os.environ
+if "REDIS_URL" in os.environ:
+    os.environ["REDIS_URL"] = ensure_ssl_cert_reqs(os.environ["REDIS_URL"])
 
 celery_app = Celery(
     "worker",

@@ -76,6 +76,7 @@ def process_image(self: Task, file_id: str, file_name: str, access_token: str, t
                 logger.error("Token expired. Purging remaining tasks and notifying frontend.")
                 publish({"type": "token_expired", "message": "Google token expired. Please re-authenticate and restart the scan."})
                 celery_app.control.purge()
+                redis_text_client.srem(dedup_key, file_id)
                 should_decrement = False
             else:
                 publish({"type": "error", "file_id": file_id, "file_name": file_name, "error": f"Download failed: HTTP {status_code}"})

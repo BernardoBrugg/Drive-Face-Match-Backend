@@ -1,18 +1,26 @@
 #!/bin/bash
 set -e
 
-# Start Redis server in the background (if running everything in one container, e.g. for free tiers)
-# NOTE: In a true production environment with multiple containers, Redis should be its own service.
-# If REDIS_URL points to an external service, we skip local redis.
-if [[ -z "$REDIS_URL" ]] || [[ "$REDIS_URL" == *"localhost"* ]] || [[ "$REDIS_URL" == *"127.0.0.1"* ]]; then
-    redis-server --daemonize yes --dir /app
+if [ -d "venv" ]; then
+    echo "Activating virtual environment..."
+    source venv/bin/activate
 fi
 
-# Start Celery worker in the background
-echo "Starting Celery worker..."
-celery -A app.core.celery_app worker --loglevel=info -c 1 &
+if [[ -z "$REDIS_URL" ]] || [[ "$REDIS_URL" == *"localhost"* ]] || [[ "$REDIS_URL" == *"127.0.0.1"* ]]; then
+    if command -v redis-server >/dev/null 2>&1; then
+        redis-server --daemonize yes --dir .
+    else
+        echo "Warning: redis-server not found. Redis-based tasks may fail if REDIS_URL is not an external service."
+    fi
+fi
 
-# Start FastAPI application
+echo "Starting Celery worker..."
+if command -v nproc >/dev/null 2>&1; then
+    CORES=$(nproc)
+else
+    CORES=2
+fi
+celery -A app.core.celery_app worker --loglevel=info -c "$CORES" &
 echo "Starting FastAPI server..."
-PORT=${PORT:-7860}
+PORT=${PORT:-8000}
 uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1

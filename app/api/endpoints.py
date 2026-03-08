@@ -105,9 +105,6 @@ async def get_scan_status(scan_id: str):
 
 @router.get("/drive/image/{file_id}")
 async def get_drive_image(file_id: str, access_token: str):
-    """
-    Proxies an image from Google Drive to the frontend bypassing CORS and redirect issues.
-    """
     url = f"https://www.googleapis.com/drive/v3/files/{file_id}?alt=media"
     headers = {"Authorization": f"Bearer {access_token}"}
     

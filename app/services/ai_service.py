@@ -6,7 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-MAX_IMAGE_DIMENSION = 2000
+MAX_IMAGE_DIMENSION = 1000
 FACE_MATCH_DISTANCE_THRESHOLD = 0.6
 
 
@@ -23,6 +23,7 @@ def get_face_encodings(image_content: bytes):
 
         image_np = np.array(image)
 
+        # Use num_jitters=1 (default) and standard model, the resizing is the main speedup
         return face_recognition.face_encodings(image_np)
 
     except UnidentifiedImageError:
