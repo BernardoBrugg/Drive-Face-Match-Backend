@@ -39,13 +39,13 @@ async def google_auth_url():
         include_granted_scopes="true",
         prompt="consent",
     )
-    return {"url": authorization_url}
+    return {"url": authorization_url, "code_verifier": flow.code_verifier}
 
 @router.post("/google/callback", response_model=OAuthTokenResponse)
 async def google_auth_callback(body: OAuthCallbackRequest):
     try:
         flow = build_flow()
-        flow.fetch_token(code=body.code)
+        flow.fetch_token(code=body.code, code_verifier=body.code_verifier)
         credentials = flow.credentials
 
         user_info_service = build("oauth2", "v2", credentials=credentials)

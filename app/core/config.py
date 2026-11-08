@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     GOOGLE_REDIRECT_URI: str = "http://localhost:3000/auth/callback"
 
     class Config:
-        env_file = ".env"
+        env_file = (".env", ".env.local")
         case_sensitive = True
         extra = "ignore"
 

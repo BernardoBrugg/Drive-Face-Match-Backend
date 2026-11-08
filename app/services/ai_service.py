@@ -1,7 +1,7 @@
 import face_recognition
 import numpy as np
 from io import BytesIO
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, ImageOps, UnidentifiedImageError
 import logging
 
 logger = logging.getLogger(__name__)
@@ -13,6 +13,8 @@ FACE_MATCH_DISTANCE_THRESHOLD = 0.6
 def get_face_encodings(image_content: bytes):
     try:
         image = Image.open(BytesIO(image_content))
+
+        image = ImageOps.exif_transpose(image)
 
         if image.mode != "RGB":
             image = image.convert("RGB")
